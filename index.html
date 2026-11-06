@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>O9C 측정 지그 4종 — 3D</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #eef0f2; font-family: Arial, "Malgun Gothic", sans-serif; color: #222; overflow: hidden; }
+  #c { position: fixed; inset: 0; }
+  #top { position: fixed; top: 0; left: 0; right: 0; display: flex; flex-wrap: wrap; gap: 4px; padding: 6px; background: rgba(255,255,255,.92); border-bottom: 1px solid #ccc; z-index: 3; }
+  #top button { font: bold 13px Arial, "Malgun Gothic"; padding: 6px 9px; border: 1px solid #888; background: #fff; border-radius: 4px; }
+  #top button.on { background: #222; color: #fff; border-color: #222; }
+  #top .t { font: bold 14px Arial; align-self: center; margin-right: 6px; }
+  #ctl { position: fixed; left: 6px; bottom: 6px; width: 250px; max-width: calc(100vw - 12px); background: rgba(255,255,255,.94); border: 1px solid #bbb; border-radius: 6px; padding: 8px; font-size: 12.5px; z-index: 3; }
+  #ctl label { display: inline-flex; align-items: center; gap: 3px; margin: 2px 8px 2px 0; }
+  #ctl input[type=range] { width: 100%; }
+  #ctl h4, #info h4 { margin: 2px 0 4px; font-size: 13px; }
+  #info { position: fixed; right: 6px; top: 50px; width: 330px; max-width: calc(100vw - 12px); max-height: calc(100vh - 70px); overflow: auto; background: rgba(255,255,255,.95); border: 1px solid #bbb; border-radius: 6px; padding: 8px 10px; font-size: 12.5px; line-height: 1.45; z-index: 2; }
+  #info table { border-collapse: collapse; width: 100%; font-size: 12px; }
+  #info td { border-top: 1px solid #ddd; padding: 2px 3px; vertical-align: top; }
+  #pick { position: fixed; left: 50%; transform: translateX(-50%); top: 52px; background: #222; color: #fff; padding: 5px 10px; border-radius: 4px; font-size: 12.5px; display: none; z-index: 4; max-width: 92vw; }
+  .hide { display: none !important; }
+  #ctl, #info, #top { box-sizing: border-box; }
+  #tg { position: fixed; right: 6px; bottom: 6px; z-index: 4; font: bold 12px Arial, "Malgun Gothic"; padding: 6px 9px; border: 1px solid #888; background: #fff; border-radius: 4px; }
+  @media (max-width: 600px) {
+    #info { top: auto; bottom: 46px; max-height: 42vh; width: auto; left: 6px; }
+    #ctl { bottom: auto; top: 86px; width: auto; right: 6px; font-size: 12px; }
+    #ctl.min .body { display: none; }
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="top"><span class="t">O9C 지그</span></div>
+<div id="pick"></div>
+<div id="ctl">
+  <h4 id="ctlh">보기 ▾</h4>
+  <div class="body">
+    <div>분해 <input id="ex" type="range" min="0" max="1" step="0.01" value="0"></div>
+    <label><input id="open" type="checkbox"> <span id="openl">뚜껑 열기</span></label>
+    <label><input id="sec" type="checkbox"> 단면</label>
+    <div id="secw" class="hide">단면 위치 x <input id="secx" type="range" min="0" max="80" step="0.5" value="40"></div>
+    <div id="layers"></div>
+  </div>
+</div>
+<div id="info"></div>
+<button id="tg">설명 숨기기</button>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module" src="app.js"></script>
+</body>
+</html>
