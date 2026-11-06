@@ -8,11 +8,13 @@ export const INFO = {
 <p><b>핀·넷</b>: 옆 4개 (±10, ±2.75) = 공통(ITO), 위·아래 4개 (±2.75, ±10) = P1 왼위, P4 오른위, P2 왼아래, P3 오른아래 → SW1–SW4. 유리는 ITO 패드가 옆 핀 쪽으로 오게 넣음.</p>
 <p><b>뚜껑</b>: 자석 4쌍 + 맞춤핀 2개로 얹는 탈착식(경첩 없음). O901과 같이 곧은 정사각 창 20.9 × 20.9(위 모서리 0.5 모따기), 아래는 폭 약 2 mm 누름 테(바깥 24.8)가 유리 가장자리만 누름. 테 높이 5.18 (1.1 t) / 4.08 (2.2 t). 화소 가장자리까지 27.5° 가림 없음.</p>
 <table>${GLASS_HW}</table>${COMMON}` },
-  MEM: { title: 'MEM — 메모리 소면적 패턴', open: '뚜껑 열기', html: `
-<p><b>용도</b>: Task 11 소면적 메모리 패턴(smallarea_261028, 셀 C1–C4 = 1.0 / 0.5 / 0.25 / 0.1 mm²) 측정. 25 × 25 × 1.1 ITO 유리.</p>
-<p><b>핀·넷</b>: S22와 같은 핀 자리. 위·아래 4개 = 셀 C1–C4, 옆 4개 = ITO. 유리를 S22처럼 90° 돌려 넣으므로 셀은 (±6.3, ±3.5). 어느 셀이 어느 핀인지는 돌린 방향에 따라 다름(미확인).</p>
-<p><b>뚜껑</b>: 1.1 t 자석 뚜껑, <b>창 없음(어두운 측정)</b>. 누름 턱 둘레에 0.7 mm 턱을 두고 주머니 위 단(27.4 × 0.8)에 끼워 빛 샘을 막음. 출력 시 100 % 채움, 검정 PETG/POM. crossbar66·gen1 패턴은 핀 12개가 필요해 이 지그에 안 맞음.</p>
+  MEM: { title: 'MEM — 메모리 크로스바 6 × 6 (핀 12개, 아래에서)', open: '뚜껑 열기', html: `
+<p><b>용도</b>: Task 11 크로스바 6 × 6(crossbar66: 위 Ag 줄 6 + 아래 줄 6 = 셀 36개, 0.2 / 0.5 mm 판) 측정. 25 × 25 × 1.1 유리를 S22처럼 <b>막면 아래로</b> 블록의 0906 핀 12개 위에 얹음.</p>
+<p><b>핀·넷</b>: 줄마다 패드가 한쪽 끝에만 있어 핀 12개(두 번째 끝 없음). AG1–AG6 = 위 Ag 줄(왼→오른, 패드 T7 T6 T5 T4 T3 T2), BL1–BL6 = 아래 줄(위→아래, 패드 T1 B3 B7 B4 B8 T8). 핀 자리 (±2, ±6, ±10.25) / (±10.25, +2, −6).</p>
+<p><b>뚜껑</b>: 공통 어두운 뚜껑 LID_MEM_1p1 그대로(창 없음, 빛 막는 턱). 주머니 25.4, 턱 z 3.6 그대로. 본 PCB는 12선용으로 다시 그려야 함(PCB 그림 없음).</p>
 <table>${GLASS_HW}</table>${COMMON}` },
+  MEMA: { title: 'MEMA — 크로스바 6 × 6 + USB-C·DB9 자리', open: '뚜껑 열기', html: `
+<p>MEM과 같은 블록(핀 12개, 아래에서). MEMA 보드의 USB-C·DB9 자리는 PCB 쪽에서 위치가 오면 블록 밑·가장자리를 파 줌(지금은 자리만 비워 둠).</p>${COMMON}` },
   SB4: { title: 'SB4 — 한 줄 4화소 (패턴 B)', open: '뚜껑 열기', html: `
 <p><b>용도</b>: ANED 싱글셀 패턴 B(화소 4개 한 줄). 25 × 25 유리 1.1 t / 2.2 t.</p>
 <p><b>핀·넷</b>: 화소 Q1–Q4 (x −7.5 / −2.5 / 2.5 / 7.5, y 9.3), 공통 막대 4핀 (±9, −10), (±3, −10). SB 보드 좌표 그대로(유리를 돌려 넣는지는 미확인). 블록에 넣는 방향 화살표 각인.</p>
@@ -33,19 +35,14 @@ export const INFO = {
 <p><b>여닫기</b>: 손나사 약 5바퀴 → 스프링이 2.3 mm 들어 올림 → 90° 바깥으로 돌림 → 웨이퍼 → 되돌려 맞춤핀에 걸고 조임.</p>
 <table><tr><td>모서리당</td><td>출력 블록, 유로 단자 슬리브(나사 2 포함), T3008 바늘(30으로 자름), 리벳 Ø2×2, M3×16 널링 손나사, 스프링 OD 5.5, Ø2×4 맞춤핀, 바닥판 M3 인서트</td></tr></table>
 <p>PCB 그림은 11/06 O9C_T2P 배치(앞 핀 자리 갱신 전).</p>` },
-  MEMhead: { title: 'MEM 포고 머리 — 크로스바 6 × 6 / gen1 (핀 12개)', open: '머리 들기', html: `
-<p><b>용도</b>: Task 11 메모리 크로스바 6 × 6과 gen1 패턴(같은 12패드: T1–T8, B3·B4·B7·B8)을 유리 막면을 위로 두고 위에서 찍음(넥스트론 WPT40C 방식). 유리 블록 공통 뚜껑 자리(맞춤핀 2 + 자석 4쌍 + 빛 막는 턱)에 그대로 얹음.</p>
-<p><b>핀</b>: 머리 PCB(22.7 × 22.7, 양면 GND = 빛 차단)에 0906 12개를 아래로 납땜, 0.9 mm 눌림 → 12 × 0.72 = 8.6 N. 자석 4쌍 18–24 N이라 2.1–2.8배 여유. 블록 바닥 핀 8개는 유리 뒷면만 밀어 올림(5.8 N, 접촉 없음) → 유리는 2.9 N으로 턱에 눌림.</p>
-<p><b>배선</b>: 머리 PCB의 0.5 mm 12핀 FFC ZIF(Hirose FH12 급, 품번 미확인) → 뒤 자석 사이 9 × 0.8 홈 → 12채널 릴레이판(SM 보드 역할). O9C MEM 본 PCB(스위치 4개)로는 12선을 받을 수 없음.</p>
-<p><b>어두움</b>: 창 없음, 덮개 + 턱. 검정 PETG 100 % 채움.</p>` },
 };
-export const TABS = [['S22', 'S22'], ['SB4', 'SB4'], ['MEM', 'MEM'], ['T2P-N', 'T2P-N'], ['T2P-A', 'T2P-A'], ['MEMhead', 'MEM 머리']];
+export const TABS = [['S22', 'S22'], ['SB4', 'SB4'], ['MEM', 'MEM'], ['T2P-N', 'T2P-N'], ['T2P-A', 'T2P-A'], ['MEMA', 'MEMA']];
 // T2P-N / T2P-A: rear contact pin (0906 under the wafer) or seat ring (0.4 ENIG ring PCB); same main PCB + base
 export const VERSEL = [['pin', '뒤: 핀'], ['ring', '뒤: 받침 고리']];
 // 3 common lids (user 11/06): every glass-cell block has the same lid interface (pocket 25.4, seat 3.6, dowels, magnets, light-tight step)
 export const LIDSEL = [['SC_1p1', 'SC 1.1 t'], ['SC_2p2', 'SC 2.2 t'], ['MEM_1p1', 'MEM 1.1 t (어두움)']];
-export const LIDDEF = { S22: 'SC_1p1', SB4: 'SC_1p1', MEM: 'MEM_1p1' };
-export const LIDINFO = '<p><b>뚜껑 3종 공통</b>: LID_SC_1p1 · LID_SC_2p2 (O901식 곧은 창 20.9, 누름 테 2 mm, 테 높이 5.18 / 4.08) · LID_MEM_1p1 (창 없음, 빛 막는 턱). 모든 유리 블록(S22·SB4·MEM)에 맞고 간섭 0. 테 높이는 0.12 측정 마스크 포함 값이라 마스크 없이 쓰면 핀이 0.9 대신 0.78 mm 눌림.</p>';
+export const LIDDEF = { S22: 'SC_1p1', SB4: 'SC_1p1', MEM: 'MEM_1p1', MEMA: 'MEM_1p1' };
+export const LIDINFO = '<p><b>뚜껑 3종 공통</b>: LID_SC_1p1 · LID_SC_2p2 (O901식 곧은 창 20.9, 누름 테 2 mm, 테 높이 5.18 / 4.08) · LID_MEM_1p1 (창 없음, 빛 막는 턱). 모든 유리 블록(S22·SB4·MEM·MEMA)에 맞고 간섭 0. 테 높이는 0.12 측정 마스크 포함 값이라 마스크 없이 쓰면 핀이 0.9 대신 0.78 mm 눌림.</p>';
 export const LAYERS = [['base', '바닥판'], ['pcb', 'PCB'], ['block', '블록'], ['lid', '뚜껑'], ['blocks', '바늘 블록'], ['pins', '핀'],
   ['front', '스위치·포스트·BNC'], ['glass', '유리·웨이퍼'], ['hw', '나사·자석']];
 export const EXPLODE = { base: -34, pcb: -17, pins: -17, front: -17, block: 0, hw: 0, glass: 16, lid: 34, blocks: 18 };
