@@ -3,10 +3,12 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { INFO, TABS, LAYERS, EXPLODE, LIDSEL, LIDDEF, LIDINFO } from './info.js';
+import { INFO, TABS, LAYERS, EXPLODE, LIDSEL, LIDDEF, LIDINFO, VERSEL } from './info.js';
 
 const MAT = {   // physically based look per kind
-  pom: { color: 0x17181a, roughness: 0.55 }, pcb: { color: 0x10301f, roughness: 0.45, clearcoat: 0.6 },
+  pom: { color: 0x17181a, roughness: 0.55 }, pcb: { color: 0x141414, roughness: 0.45, clearcoat: 0.6 },
+  ss: { color: 0xc9ccd0, metalness: 1, roughness: 0.38 }, chrome: { color: 0xe8eaec, metalness: 1, roughness: 0.08 },
+  black: { color: 0x0d0d0e, roughness: 0.42, clearcoat: 0.3 }, kapton: { color: 0xc8781e, roughness: 0.35, transparent: true, opacity: 0.85 },
   gold: { color: 0xd8b04a, metalness: 1, roughness: 0.28 }, steel: { color: 0xbfc3c8, metalness: 1, roughness: 0.32 },
   brass: { color: 0xc9a45a, metalness: 1, roughness: 0.3 }, tungsten: { color: 0x8d9095, metalness: 1, roughness: 0.25 },
   nickel: { color: 0xd6d6d2, metalness: 1, roughness: 0.22 }, magnet: { color: 0xa0a2a6, metalness: 1, roughness: 0.3 },
@@ -53,6 +55,15 @@ async function loadModel(id) {
     list.push(o);
   });
   g.add(gltf.scene);
+  for (const m of meta.parts.filter((p) => p.tex)) {   // KiCad top render on the PCB top face
+    const [x0, y0, x1, y1, zt] = m.rect;
+    const tex = await new THREE.TextureLoader().loadAsync(`models/${m.tex}`);
+    tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
+    const pl = new THREE.Mesh(new THREE.PlaneGeometry(x1 - x0, y1 - y0), new THREE.MeshPhysicalMaterial({ map: tex, roughness: 0.45, clearcoat: 0.5, clippingPlanes: [] }));
+    pl.position.set((x0 + x1) / 2, (y0 + y1) / 2, zt + 0.03);
+    pl.userData = { ...m, name: m.name + ' (KiCad 그림)', base: pl.position.clone() };
+    gltf.scene.add(pl); list.push(pl);
+  }
   cache[id] = { g, list };
   return cache[id];
 }
@@ -68,19 +79,21 @@ function apply() {
     o.material.clippingPlanes = state.sec ? [cut] : [];
   }
 }
-let lidSel = {};
+let lidSel = {}, verSel = 'ring';
 async function show(id) {
-  const t2 = id === 'T2P';
+  const t2 = id.startsWith('T2P'), hd = id === 'MEMhead';
   const lid = lidSel[id] || LIDDEF[id];
-  const realId = t2 ? (state.open ? 'T2P_open' : 'T2P') : `${id}__${lid}`;
-  document.getElementById('lidrow').classList.toggle('hide', t2);
+  const realId = t2 ? `${id}-${verSel}${state.open ? '_open' : ''}` : hd ? 'MEMhead' : `${id}__${lid}`;
+  document.getElementById('lidrow').classList.toggle('hide', t2 || hd);
+  document.getElementById('verrow').classList.toggle('hide', !t2);
+  document.querySelectorAll('#verrow button').forEach((b) => b.classList.toggle('on', b.dataset.v === verSel));
   document.querySelectorAll('#lidrow button').forEach((b) => b.classList.toggle('on', b.dataset.l === lid));
   const c = await loadModel(realId);
   if (cur) root.remove(cur.g);
   cur = c; curId = realId; parts = c.list; root.add(c.g);
   document.querySelectorAll('#top button').forEach((b) => b.classList.toggle('on', b.dataset.id === id));
   const inf = INFO[id];
-  document.getElementById('info').innerHTML = `<h4>${inf.title}</h4>${inf.html}${t2 ? '' : LIDINFO}`;
+  document.getElementById('info').innerHTML = `<h4>${inf.title}</h4>${inf.html}${t2 || hd ? '' : LIDINFO}`;
   document.getElementById('openl').textContent = inf.open;
   apply();
 }
@@ -99,6 +112,11 @@ const lr = document.getElementById('lidrow');
 for (const [l, label] of LIDSEL) {
   const b = document.createElement('button'); b.textContent = label; b.dataset.l = l;
   b.onclick = () => { lidSel[active] = l; show(active); }; lr.appendChild(b);
+}
+const vr = document.getElementById('verrow');
+for (const [v, label] of VERSEL) {
+  const b = document.createElement('button'); b.textContent = label; b.dataset.v = v;
+  b.onclick = () => { verSel = v; show(active); }; vr.appendChild(b);
 }
 const lay = document.getElementById('layers');
 for (const [k, label] of LAYERS) {
@@ -130,10 +148,11 @@ canvas.addEventListener('pointerup', (e) => {
 });
 addEventListener('resize', fit);
 fit();
-// URL options for sharing a view: ?m=T2P&open=1&ex=0.6&sec=1
+// URL options for sharing a view: ?m=T2P-N&v=ring&open=1&ex=0.6&sec=1
 const q = new URLSearchParams(location.search);
 if (q.get('m') && INFO[q.get('m')]) active = q.get('m');
 if (q.get('lid')) lidSel[active] = q.get('lid');
+if (q.get('v') === 'pin' || q.get('v') === 'ring') verSel = q.get('v');
 if (q.get('open') === '1') { state.open = true; document.getElementById('open').checked = true; }
 if (q.get('ex')) { state.ex = +q.get('ex'); document.getElementById('ex').value = state.ex; }
 if (q.get('sec') === '1') { state.sec = true; document.getElementById('sec').checked = true; document.getElementById('secw').classList.remove('hide'); }
