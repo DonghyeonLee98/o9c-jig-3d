@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { INFO, TABS, LAYERS, EXPLODE } from './info.js';
+import { INFO, TABS, LAYERS, EXPLODE, LIDSEL, LIDDEF, LIDINFO } from './info.js';
 
 const MAT = {   // physically based look per kind
   pom: { color: 0x17181a, roughness: 0.55 }, pcb: { color: 0x10301f, roughness: 0.45, clearcoat: 0.6 },
@@ -68,15 +68,19 @@ function apply() {
     o.material.clippingPlanes = state.sec ? [cut] : [];
   }
 }
+let lidSel = {};
 async function show(id) {
   const t2 = id === 'T2P';
-  const realId = t2 && state.open ? 'T2P_open' : id;
+  const lid = lidSel[id] || LIDDEF[id];
+  const realId = t2 ? (state.open ? 'T2P_open' : 'T2P') : `${id}__${lid}`;
+  document.getElementById('lidrow').classList.toggle('hide', t2);
+  document.querySelectorAll('#lidrow button').forEach((b) => b.classList.toggle('on', b.dataset.l === lid));
   const c = await loadModel(realId);
   if (cur) root.remove(cur.g);
   cur = c; curId = realId; parts = c.list; root.add(c.g);
   document.querySelectorAll('#top button').forEach((b) => b.classList.toggle('on', b.dataset.id === id));
   const inf = INFO[id];
-  document.getElementById('info').innerHTML = `<h4>${inf.title}</h4>${inf.html}`;
+  document.getElementById('info').innerHTML = `<h4>${inf.title}</h4>${inf.html}${t2 ? '' : LIDINFO}`;
   document.getElementById('openl').textContent = inf.open;
   apply();
 }
@@ -86,10 +90,15 @@ function fit() {
 }
 // UI
 const top = document.getElementById('top');
-let active = 'S22_1p1';
+let active = 'S22';
 for (const [id, label] of TABS) {
   const b = document.createElement('button'); b.textContent = label; b.dataset.id = id;
   b.onclick = () => { active = id; show(id); }; top.appendChild(b);
+}
+const lr = document.getElementById('lidrow');
+for (const [l, label] of LIDSEL) {
+  const b = document.createElement('button'); b.textContent = label; b.dataset.l = l;
+  b.onclick = () => { lidSel[active] = l; show(active); }; lr.appendChild(b);
 }
 const lay = document.getElementById('layers');
 for (const [k, label] of LAYERS) {
@@ -124,6 +133,7 @@ fit();
 // URL options for sharing a view: ?m=T2P&open=1&ex=0.6&sec=1
 const q = new URLSearchParams(location.search);
 if (q.get('m') && INFO[q.get('m')]) active = q.get('m');
+if (q.get('lid')) lidSel[active] = q.get('lid');
 if (q.get('open') === '1') { state.open = true; document.getElementById('open').checked = true; }
 if (q.get('ex')) { state.ex = +q.get('ex'); document.getElementById('ex').value = state.ex; }
 if (q.get('sec') === '1') { state.sec = true; document.getElementById('sec').checked = true; document.getElementById('secw').classList.remove('hide'); }

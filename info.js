@@ -2,7 +2,7 @@
 const COMMON = '<p><b>공통</b>: 80 × 130.13 mm, 바닥판 8 + PCB 1.6 + 셀 블록 10 + 뚜껑 5.99 (O901과 같은 모양). 앞쪽: DECO AT2D 토글, JB-601 바인딩 포스트(19.05 간격), 직각 BNC. 출력은 일반 PETG(또는 POM 가공) — 탄소 섬유 PETG-CF는 누설 때문에 쓰지 않음.</p>';
 const GLASS_HW = '<tr><td>스프링 핀</td><td>Mill-Max 0906 ×8 (작동 3.6 mm, 0.72 N)</td></tr><tr><td>블록 나사</td><td>M3×16 접시 ×4</td></tr><tr><td>자석</td><td>Ø6×2 ×8 (블록 4 + 뚜껑 4)</td></tr><tr><td>맞춤핀</td><td>Ø3×10 ×2 (구멍 1 + 장공 1)</td></tr>';
 export const INFO = {
-  S22_1p1: { title: 'S22 — 싱글셀 2 × 2 화소 (O901 복제)', open: '뚜껑 열기', html: `
+  S22: { title: 'S22 — 싱글셀 2 × 2 화소 (O901 복제)', open: '뚜껑 열기', html: `
 <p><b>용도</b>: 25 × 25 유리 위 2 × 2 화소 태양전지 J–V. 막 면을 아래로 핀 8개 위에 얹고 위에서 빛.</p>
 <p><b>유리</b>: 1.1 t / 2.2 t (뚜껑 두 개). 주머니 25.4(사용자 실측), 턱 z 3.6 = 핀 작동 높이 → 핀 0.9 mm 눌림. 측정 마스크 24.8 × 0.12를 유리 위에 얹을 자리 포함.</p>
 <p><b>핀·넷</b>: 옆 4개 (±10, ±2.75) = 공통(ITO), 위·아래 4개 (±2.75, ±10) = P1 왼위, P4 오른위, P2 왼아래, P3 오른아래 → SW1–SW4. 유리는 ITO 패드가 옆 핀 쪽으로 오게 넣음.</p>
@@ -26,8 +26,11 @@ export const INFO = {
 <table><tr><td>바늘</td><td>Ossila T3008 W Ø0.508 ×4 (약 22로 자름)</td></tr><tr><td>클램프 블록</td><td>황동 9 × 10.35 × 5 + 발 ×4</td></tr><tr><td>세트스크류</td><td>M2×5 컵 끝 ×4</td></tr><tr><td>손나사</td><td>M3×16 널링 ×4 + 열압입 인서트 M3×5.7 ×4</td></tr><tr><td>들어올림 스프링</td><td>OD 5.5, 선 0.3–0.4, 5감김 이하, 자유 5.5–6 ×4 (품번 미확인)</td></tr><tr><td>맞춤핀</td><td>Ø2×4 ×4 (블록 맞춘 뒤 제자리 드릴)</td></tr><tr><td>스프링 핀</td><td>Mill-Max 0906 ×8 (뒤 4 + 발 4)</td></tr><tr><td>앞쪽</td><td>포스트 4 (FORCE HI/LO, SENSE HI/LO), REV 토글 2(함께 전환), BNC 없음</td></tr></table>
 <p><b>공통</b>: 80 × 130.13, 바닥판 8 + PCB 1.6 + 몸체 5. 출력은 일반 PETG(또는 POM 가공), 탄소 섬유 PETG-CF 사용 안 함.</p>` },
 };
-INFO.S22_2p2 = { ...INFO.S22_1p1, title: 'S22 — 싱글셀 2 × 2 화소, 2.2 t 뚜껑' };
-export const TABS = [['S22_1p1', 'S22 1.1 t'], ['S22_2p2', 'S22 2.2 t'], ['MEM', 'MEM'], ['SB4', 'SB4'], ['T2P', 'T2P']];
+export const TABS = [['S22', 'S22'], ['SB4', 'SB4'], ['MEM', 'MEM'], ['T2P', 'T2P']];
+// 3 common lids (user 11/06): every glass-cell block has the same lid interface (pocket 25.4, seat 3.6, dowels, magnets, light-tight step)
+export const LIDSEL = [['SC_1p1', 'SC 1.1 t'], ['SC_2p2', 'SC 2.2 t'], ['MEM_1p1', 'MEM 1.1 t (어두움)']];
+export const LIDDEF = { S22: 'SC_1p1', SB4: 'SC_1p1', MEM: 'MEM_1p1' };
+export const LIDINFO = '<p><b>뚜껑 3종 공통</b>: LID_SC_1p1 · LID_SC_2p2 (O901식 곧은 창 20.9, 누름 테 2 mm, 테 높이 5.18 / 4.08) · LID_MEM_1p1 (창 없음, 빛 막는 턱). 모든 유리 블록(S22·SB4·MEM)에 맞고 간섭 0. 테 높이는 0.12 측정 마스크 포함 값이라 마스크 없이 쓰면 핀이 0.9 대신 0.78 mm 눌림.</p>';
 export const LAYERS = [['base', '바닥판'], ['pcb', 'PCB'], ['block', '블록'], ['lid', '뚜껑'], ['blocks', '바늘 블록'], ['pins', '핀'],
   ['front', '스위치·포스트·BNC'], ['glass', '유리·웨이퍼'], ['hw', '나사·자석']];
 export const EXPLODE = { base: -34, pcb: -17, pins: -17, front: -17, block: 0, hw: 0, glass: 16, lid: 34, blocks: 18 };
