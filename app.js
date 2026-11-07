@@ -13,7 +13,7 @@ const MAT = {   // physically based look per kind
   brass: { color: 0xc9a45a, metalness: 1, roughness: 0.3 }, tungsten: { color: 0x8d9095, metalness: 1, roughness: 0.25 },
   nickel: { color: 0xd6d6d2, metalness: 1, roughness: 0.22 }, magnet: { color: 0xa0a2a6, metalness: 1, roughness: 0.3 },
   glass: { color: 0xa9d6e6, roughness: 0.05, transparent: true, opacity: 0.35 }, si: { color: 0x2b3240, metalness: 0.4, roughness: 0.25 },
-  toggle: { color: 0xc4262b, roughness: 0.5 }, post_red: { color: 0xc01d1d, roughness: 0.4 }, post_black: { color: 0x1b1b1b, roughness: 0.4 },
+  toggle: { color: 0xc4262b, roughness: 0.5 }, post_red: { color: 0xc01d1d, roughness: 0.4 }, post_black: { color: 0x1b1b1b, roughness: 0.4 }, post_green: { color: 0x1d8a3a, roughness: 0.4 },
   misc: { color: 0x888888, roughness: 0.6 },
 };
 const canvas = document.getElementById('c');
