@@ -79,13 +79,13 @@ function apply() {
     o.material.clippingPlanes = state.sec ? [cut] : [];
   }
 }
-let lidSel = {}, verSel = 'ring';
+let lidSel = {}, verSel = 'pin';
 async function show(id) {
   const t2 = id.startsWith('T2P'), hd = id === 'MEMhead';
   const lid = lidSel[id] || LIDDEF[id];
   const realId = t2 ? `${id}-${verSel}${state.open ? '_open' : ''}` : hd ? 'MEMhead' : `${id}__${lid}`;
   document.getElementById('lidrow').classList.toggle('hide', t2 || hd);
-  document.getElementById('verrow').classList.toggle('hide', !t2);
+  document.getElementById('verrow').classList.toggle('hide', !t2 || VERSEL.length < 2);
   document.querySelectorAll('#verrow button').forEach((b) => b.classList.toggle('on', b.dataset.v === verSel));
   document.querySelectorAll('#lidrow button').forEach((b) => b.classList.toggle('on', b.dataset.l === lid));
   const c = await loadModel(realId);
