@@ -84,7 +84,8 @@ async function show(id) {
   const t2 = id.startsWith('T2P'), hd = id === 'MEMhead';
   const lid = lidSel[id] || LIDDEF[id];
   const realId = t2 ? `${id}-${verSel}${state.open ? '_open' : ''}` : hd ? 'MEMhead' : `${id}__${lid}`;
-  document.getElementById('lidrow').classList.toggle('hide', t2 || hd);
+  const small = id === 'MEM' || id === 'MEMA';   // 261107: small dark block with its own LID_MEM
+  document.getElementById('lidrow').classList.toggle('hide', t2 || hd || small);
   document.getElementById('verrow').classList.toggle('hide', !t2 || VERSEL.length < 2);
   document.querySelectorAll('#verrow button').forEach((b) => b.classList.toggle('on', b.dataset.v === verSel));
   document.querySelectorAll('#lidrow button').forEach((b) => b.classList.toggle('on', b.dataset.l === lid));
@@ -93,7 +94,7 @@ async function show(id) {
   cur = c; curId = realId; parts = c.list; root.add(c.g);
   document.querySelectorAll('#top button').forEach((b) => b.classList.toggle('on', b.dataset.id === id));
   const inf = INFO[id];
-  document.getElementById('info').innerHTML = `<h4>${inf.title}</h4>${inf.html}${t2 || hd ? '' : LIDINFO}`;
+  document.getElementById('info').innerHTML = `<h4>${inf.title}</h4>${inf.html}${t2 || hd || small ? '' : LIDINFO}`;
   document.getElementById('openl').textContent = inf.open;
   apply();
 }

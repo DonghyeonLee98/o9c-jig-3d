@@ -11,10 +11,10 @@ export const INFO = {
   MEM: { title: 'MEM — 메모리 크로스바 6 × 6 (핀 12개, 아래에서)', open: '뚜껑 열기', html: `
 <p><b>용도</b>: Task 11 크로스바 6 × 6(crossbar66: 위 Ag 줄 6 + 아래 줄 6 = 셀 36개, 0.2 / 0.5 mm 판) 측정. 25 × 25 × 1.1 유리를 S22처럼 <b>막면 아래로</b> 블록의 0906 핀 12개 위에 얹음.</p>
 <p><b>핀·넷</b>: 줄마다 패드가 한쪽 끝에만 있어 핀 12개(두 번째 끝 없음). AG1–AG6 = 위 Ag 줄(왼→오른, 패드 T7 T6 T5 T4 T3 T2), BL1–BL6 = 아래 줄(위→아래, 패드 T1 B3 B7 B4 B8 T8). 핀 자리 (±2, ±6, ±10.25) / (±10.25, +2, −6).</p>
-<p><b>뚜껑</b>: 공통 어두운 뚜껑 LID_MEM_1p1 그대로(창 없음, 빛 막는 턱). 주머니 25.4, 턱 z 3.6 그대로. 본 PCB O9C_MEM: 토글 13개(T1–T6 = AG1–6 위 줄, B1–B6 = BL1–6 아래 줄, FWD/REV). T 하나와 B 하나를 켜서 셀 하나를 고름.</p>
+<p><b>블록</b>: 셀 자리가 어차피 어두워서 블록을 45 × 45로 줄임(셀 중심 그대로, 주머니 25.4, 턱 z 3.6). 자석 4쌍은 모서리, M3×12 접시 나사 4개는 양옆, 맞춤핀 2개는 뒤쪽. 블록 밖 PCB(앞 71.5 mm, 양옆 17.5 mm, 뒤 13.6 mm)는 토글 13개와 MEMA 전자부품 자리. <b>뚜껑</b>: 같은 크기의 전용 어두운 뚜껑 LID_MEM(창 없음, 빛 막는 턱). 주머니 25.4, 턱 z 3.6 그대로. 본 PCB O9C_MEM: 토글 13개(T1–T6 = AG1–6 위 줄, B1–B6 = BL1–6 아래 줄, FWD/REV). T 하나와 B 하나를 켜서 셀 하나를 고름.</p>
 <table>${GLASS_HW}</table>${COMMON}` },
   MEMA: { title: 'MEMA — 크로스바 6 × 6 + USB-C·DB9 자리', open: '뚜껑 열기', html: `
-<p>MEM과 같은 블록(핀 12개, 아래에서). <b>자동(릴레이) 보드는 아직 설계 전</b> — 여기서는 MEM 보드를 그대로 보여 줌. USB-C·DB9 자리는 보드 위치가 정해지면 블록 밑·가장자리를 파 줌.</p>${COMMON}` },
+<p>MEM과 같은 45 × 45 블록(핀 12개, 아래에서). <b>자동(릴레이) 보드는 아직 설계 전</b> — 여기서는 MEM 보드를 그대로 보여 줌. USB-C·DB9 자리는 보드 위치가 정해지면 블록 밑·가장자리를 파 줌.</p>${COMMON}` },
   SB4: { title: 'SB4 — 한 줄 4화소 (패턴 B)', open: '뚜껑 열기', html: `
 <p><b>용도</b>: ANED 싱글셀 패턴 B(화소 4개 한 줄). 25 × 25 유리 1.1 t / 2.2 t.</p>
 <p><b>핀·넷</b>: 화소 Q1–Q4 (x −7.5 / −2.5 / 2.5 / 7.5, y 9.3), 공통 막대 4핀 (±9, −10), (±3, −10). SB 보드 좌표 그대로(유리를 돌려 넣는지는 미확인). 블록에 넣는 방향 화살표 각인.</p>
@@ -43,7 +43,7 @@ export const VERSEL = [['pin', '뒤: 핀']];   // 261107: seat ring dropped
 // 3 common lids (user 11/06): every glass-cell block has the same lid interface (pocket 25.4, seat 3.6, dowels, magnets, light-tight step)
 export const LIDSEL = [['SC_1p1', 'SC 1.1 t'], ['SC_2p2', 'SC 2.2 t'], ['MEM_1p1', 'MEM 1.1 t (어두움)']];
 export const LIDDEF = { S22: 'SC_1p1', SB4: 'SC_1p1', MEM: 'MEM_1p1', MEMA: 'MEM_1p1' };
-export const LIDINFO = '<p><b>뚜껑 3종 공통</b>: LID_SC_1p1 · LID_SC_2p2 (O901식 곧은 창 20.9, 누름 테 2 mm, 테 높이 1.18 / 0.08) · LID_MEM_1p1 (창 없음, 빛 막는 턱). 모든 유리 블록(S22·SB4·MEM·MEMA)에 맞고 간섭 0. 테 높이는 0.12 측정 마스크 포함 값이라 마스크 없이 쓰면 핀이 0.9 대신 0.78 mm 눌림.</p>';
+export const LIDINFO = '<p><b>뚜껑 3종 공통</b>: LID_SC_1p1 · LID_SC_2p2 (O901식 곧은 창 20.9, 누름 테 2 mm, 테 높이 1.18 / 0.08) · LID_MEM_1p1 (창 없음, 빛 막는 턱). S22·SB4 블록에 맞고(MEM·MEMA는 전용 LID_MEM) 간섭 0. 테 높이는 0.12 측정 마스크 포함 값이라 마스크 없이 쓰면 핀이 0.9 대신 0.78 mm 눌림.</p>';
 export const LAYERS = [['base', '바닥판'], ['pcb', 'PCB'], ['block', '블록'], ['lid', '뚜껑'], ['blocks', '바늘 블록'], ['pins', '핀'],
   ['front', '스위치·포스트·BNC'], ['glass', '유리·웨이퍼'], ['hw', '나사·자석']];
 export const EXPLODE = { base: -34, pcb: -17, pins: -17, front: -17, block: 0, hw: 0, glass: 16, lid: 34, blocks: 18 };
