@@ -92,11 +92,25 @@ async function show(id) {
   const c = await loadModel(realId);
   if (cur) root.remove(cur.g);
   cur = c; curId = realId; parts = c.list; root.add(c.g);
+  if (framedFor !== id) { frame(); framedFor = id; }   // 261109: fit the camera to the model (phones showed only a corner)
   document.querySelectorAll('#top button').forEach((b) => b.classList.toggle('on', b.dataset.id === id));
   const inf = INFO[id];
   document.getElementById('info').innerHTML = `<h4>${inf.title}</h4>${inf.html}${t2 || hd || small ? '' : LIDINFO}`;
   document.getElementById('openl').textContent = inf.open;
   apply();
+}
+let framedFor = null;
+function frame() {   // keep the viewing direction, set distance + target from the model's bounding sphere, aspect-aware
+  const box = new THREE.Box3().setFromObject(root);
+  if (box.isEmpty()) return;
+  const c = box.getCenter(new THREE.Vector3()), r = box.getSize(new THREE.Vector3()).length() / 2;
+  const vf = THREE.MathUtils.degToRad(camera.fov), hf = 2 * Math.atan(Math.tan(vf / 2) * camera.aspect);
+  const dist = (r / Math.sin(Math.min(vf, hf) / 2)) * (innerWidth < 600 ? 1.15 : 1.05);
+  const dir = camera.position.clone().sub(controls.target).normalize();
+  if (innerWidth < 600) c.y -= r * 0.25;   // phones: the top bar covers the upper part, so look a little lower
+  controls.target.copy(c);
+  camera.position.copy(c).addScaledVector(dir, dist);
+  camera.lookAt(c); controls.update();
 }
 function fit() {
   const w = innerWidth, h = innerHeight;
@@ -159,6 +173,7 @@ if (q.get('ex')) { state.ex = +q.get('ex'); document.getElementById('ex').value 
 if (q.get('sec') === '1') { state.sec = true; document.getElementById('sec').checked = true; document.getElementById('secw').classList.remove('hide'); }
 const small = innerWidth < 600;
 if (small) document.getElementById('ctl').classList.add('min');
+if (small) { document.getElementById('info').classList.add('hide'); document.getElementById('tg').textContent = '설명 보기'; }   // phones: model first, text on tap
 camera.position.set(40 + (small ? 95 : 115), small ? 215 : 170, -75 + (small ? 230 : 215));
 controls.target.set(40, small ? -20 : 0, -78);
 camera.lookAt(controls.target);
