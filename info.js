@@ -28,8 +28,17 @@ export const INFO = {
 <table><tr><td>모서리당 12 + 바늘</td><td>출력 모듈, 손나사 M3×10(미스미), PTFE 와셔, 바닥판 밑면 M3 너트, SUS 와셔 SPWF2.5 2, M2×5 2, M2 인서트 Ø3.2×3 2, 링 단자, AWG24 선 + T3008 바늘</td></tr>
 <tr><td>공통</td><td>바닥판·PCB 한 장(80 × 134), 0906 뒤 4, 볼트 SCB3-10 + 밑면 너트 4, 포스트 4, BNC 2(옆으로: FORCE·SENSE)</td></tr></table>
 <p>PCB 그림은 11/07 15:2x O9C_T2P(80 × 134, REV 없음, BNC 2, 선 패드 W1–W4).</p>` },
+  'T2P-L': { title: 'T2P-L — KIER 2T 탠덤, 뚜껑 PCB 방식 (뚜껑 PCB에 앞 핀 4개)', open: '뚜껑 3.5 mm 열기 (웨이퍼 넣기)', html: `
+<p><b>방식</b>: 뚜껑 PCB(72 × 72 × 1.6, 십자 창)를 몸체 기둥 위에 얹고 손잡이 2개로 눌러 닫음. 몸체 80 × 79.1 × 8.35 (POM 가공 또는 PLA 출력), 기둥 4개 윗면 z 8.35가 뚜껑 멈춤. 바람개비 모듈·바늘 없음.</p>
+<p><b>앞 접촉</b>: 뚜껑 밑면 Mill-Max 0906 핀 4개가 KIER 앞 패드(±6.45)를 직접 누름 — F 대각 2 + S 대각 2(4선). 눌림 0.70 mm, 핀당 0.59 N. 뒤는 0906 4개가 웨이퍼 밑에서 받침.</p>
+<p><b>열고 닫기</b>: 미스미 손잡이 NOOSF3-14 2개를 7바퀴 풀면 3.5 mm 열림. 스프링 UL5-10 2개(맞춤핀 MS2-15 둘레)가 뚜껑을 밀어 올림. 웨이퍼 25 mm는 열린 틈으로 앞에서 밀어 넣음.</p>
+<p><b>위·아래 PCB 연결</b>: 뚜껑 밑의 황동 M3 스탠드오프 L4 + SPWF3 와셔 4개에 아래 PCB 패드 W1–W4의 0906 연결 핀이 닿음(0.55 N). 아래 PCB O9C_T2P(결제 완료)와 바닥판 T2PN_base는 T2P-N과 같고 바뀌지 않음.</p>
+<p><b>빛</b>: 십자 창 기준 입사 45°에서 92 %, 60°에서 79 %(평균 가림 없는 비율). 부품 간섭 0.</p>
+<table><tr><td>뚜껑</td><td>PCB 72 × 72 × 1.6 ENIG 1, 앞 핀 0906-1 4, 스탠드오프 M3 L4 4 + SPWF3 + SCB3-6, 손잡이 2, 스프링 2, 맞춤핀 2</td></tr>
+<tr><td>아래</td><td>바닥판·PCB 한 장(80 × 134), 연결 핀 0906 4(W1–W4), 뒤 핀 0906 4, 볼트 SCB3-10 + 밑면 너트 4, 포스트 4, BNC 2</td></tr></table>
+<p>뚜껑 PCB는 좌표만 정한 상태(배선 없음, 아직 주문 전). 설계안 §25 (11/09).</p>` },
 };
-export const TABS = [['S22', 'S22'], ['SB4', 'SB4'], ['MEM', 'MEM'], ['T2P-N', 'T2P-N'], ['MEMA', 'MEMA']];
+export const TABS = [['S22', 'S22'], ['SB4', 'SB4'], ['MEM', 'MEM'], ['T2P-N', 'T2P-N'], ['T2P-L', 'T2P-L (뚜껑 PCB)'], ['MEMA', 'MEMA']];
 // T2P-N / T2P-A: rear contact pin (0906 under the wafer) or seat ring (0.4 ENIG ring PCB); same main PCB + base
 export const VERSEL = [['pin', '뒤: 핀']];   // 261107: seat ring dropped
 // 3 common lids (user 11/06): every glass-cell block has the same lid interface (pocket 25.4, seat 3.6, dowels, magnets, light-tight step)
