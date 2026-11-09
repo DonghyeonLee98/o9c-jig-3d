@@ -161,7 +161,10 @@ canvas.addEventListener('pointerup', (e) => {
   pick.textContent = `${u.name} — 외곽 ${u.dims.join(' × ')} mm`;
   pick.style.display = 'block';
 });
-addEventListener('resize', fit);
+let userMoved = false;
+controls.addEventListener('start', () => { userMoved = true; });
+addEventListener('resize', () => { fit(); if (!userMoved && cur) frame(); });   // the pane/phone may resize after load: re-frame until the user takes over
+window.__v = { camera, controls, root, scene, frame };   // debugging from the console
 fit();
 // URL options for sharing a view: ?m=T2P-N&v=ring&open=1&ex=0.6&sec=1
 const q = new URLSearchParams(location.search);
