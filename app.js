@@ -104,9 +104,12 @@ function frame() {   // keep the viewing direction, set distance + target from t
   const box = new THREE.Box3().setFromObject(root);
   if (box.isEmpty()) return;
   const c = box.getCenter(new THREE.Vector3()), r = box.getSize(new THREE.Vector3()).length() / 2;
-  const vf = THREE.MathUtils.degToRad(camera.fov), hf = 2 * Math.atan(Math.tan(vf / 2) * camera.aspect);
+  if (!(innerWidth > 0 && innerHeight > 0) || !isFinite(r) || r <= 0) return;   // hidden pane / 0-size viewport: wait for the resize
+  const vf = THREE.MathUtils.degToRad(camera.fov), hf = 2 * Math.atan(Math.tan(vf / 2) * (innerWidth / innerHeight));
   const dist = (r / Math.sin(Math.min(vf, hf) / 2)) * (innerWidth < 600 ? 1.15 : 1.05);
-  const dir = camera.position.clone().sub(controls.target).normalize();
+  let dir = camera.position.clone().sub(controls.target);
+  if (!isFinite(dir.lengthSq()) || dir.lengthSq() < 1e-6) dir = new THREE.Vector3(115, 170, 215);   // default view direction
+  dir.normalize();
   if (innerWidth < 600) c.y -= r * 0.25;   // phones: the top bar covers the upper part, so look a little lower
   controls.target.copy(c);
   camera.position.copy(c).addScaledVector(dir, dist);
@@ -176,7 +179,7 @@ if (q.get('ex')) { state.ex = +q.get('ex'); document.getElementById('ex').value 
 if (q.get('sec') === '1') { state.sec = true; document.getElementById('sec').checked = true; document.getElementById('secw').classList.remove('hide'); }
 const small = innerWidth < 600;
 if (small) document.getElementById('ctl').classList.add('min');
-if (small) { document.getElementById('info').classList.add('hide'); document.getElementById('tg').textContent = '설명 보기'; }   // phones: model first, text on tap
+if (small && innerWidth > 0) { document.getElementById('info').classList.add('hide'); document.getElementById('tg').textContent = '설명 보기'; }   // phones: model first, text on tap
 camera.position.set(40 + (small ? 95 : 115), small ? 215 : 170, -75 + (small ? 230 : 215));
 controls.target.set(40, small ? -20 : 0, -78);
 camera.lookAt(controls.target);
