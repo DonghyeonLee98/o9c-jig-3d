@@ -37,8 +37,15 @@ export const INFO = {
 <table><tr><td>뚜껑</td><td>PCB 72 × 72 × 1.6 ENIG 1, 앞 핀 0906-1 4, 스탠드오프 M3 L4 4 + SPWF3 + SCB3-6, 손잡이 2, 스프링 2, 맞춤핀 2</td></tr>
 <tr><td>아래</td><td>바닥판·PCB 한 장(80 × 134), 연결 핀 0906 4(W1–W4), 뒤 핀 0906 4, 볼트 SCB3-10 + 밑면 너트 4, 포스트 4, BNC 2</td></tr></table>
 <p>뚜껑 PCB는 좌표만 정한 상태(배선 없음, 아직 주문 전). 설계안 §25 (11/09).</p>` },
+  'T2P-L3': { title: 'T2P-L3 — KIER 3단자 탠덤, 뚜껑 PCB 방식 (중간 전극 접점 2개 추가)', open: '뚜껑 3.5 mm 열기 (웨이퍼 넣기)', html: `
+<p><b>T2P-L과 다른 점</b>: T2P-L에 중간 전극(재결합 ITO) 접점 2개를 더한 3단자형. 뚜껑 PCB 72 × 72에 앞 핀 4개(±6.45) + 중간 핀 2개 MF (−10.4, −8.6)·MS (−8.6, −10.4). 중간 핀은 웨이퍼 (−x, −y) 모서리의 4.4 mm 닦기 창 안 Ag 패드 Ø1.6을 누름(Kelvin 쌍).</p>
+<p><b>몸체</b>: 80 × 79.1 × 8.35, 기둥 4개. 웨이퍼 깎인 모서리(키 3 mm)는 (+x, +y) = 뒤오른쪽이며, 덱 모서리에 삼각 표시 + KEY가 있음.</p>
+<p><b>위·아래 연결</b>: 연결 기둥 6개(황동 M3 스탠드오프 L4 + 와셔), 아래 PCB O9C_T2P3(W5·W6 + MID F/S 포스트 2개 추가), 바닥판 T2PL3_base(W5·W6 자리·MID 포스트 너트 자리).</p>
+<p><b>힘·열기</b>: 핀 힘 앞·중간 0.59 N, 연결 0.55 N. 손잡이 7바퀴 = 3.5 mm 열림, 스프링 UF5-10 2개.</p>
+<p><b>빛</b>: 45°에서 92 %, 60°에서 79 %(2T와 같음). 부품 간섭 0.</p>
+<p><b>측정</b>: SMU-A FRONT–MID, SMU-B MID–REAR. 설계안 §26 (11/10).</p>` },
 };
-export const TABS = [['S22', 'S22'], ['SB4', 'SB4'], ['MEM', 'MEM'], ['T2P-N', 'T2P-N'], ['T2P-L', 'T2P-L (뚜껑 PCB)'], ['MEMA', 'MEMA']];
+export const TABS = [['S22', 'S22'], ['SB4', 'SB4'], ['MEM', 'MEM'], ['T2P-N', 'T2P-N'], ['T2P-L', 'T2P-L (뚜껑 PCB)'], ['T2P-L3', 'T2P-L3 (3단자)'], ['MEMA', 'MEMA']];
 // T2P-N / T2P-A: rear contact pin (0906 under the wafer) or seat ring (0.4 ENIG ring PCB); same main PCB + base
 export const VERSEL = [['pin', '뒤: 핀']];   // 261107: seat ring dropped
 // 3 common lids (user 11/06): every glass-cell block has the same lid interface (pocket 25.4, seat 3.6, dowels, magnets, light-tight step)
