@@ -14,7 +14,7 @@ const MAT = {   // physically based look per kind
   nickel: { color: 0xd6d6d2, metalness: 1, roughness: 0.22 }, magnet: { color: 0xa0a2a6, metalness: 1, roughness: 0.3 },
   glass: { color: 0xa9d6e6, roughness: 0.05, transparent: true, opacity: 0.35 }, si: { color: 0x2b3240, metalness: 0.4, roughness: 0.25 },
   toggle: { color: 0xc4262b, roughness: 0.5 }, post_red: { color: 0xc01d1d, roughness: 0.4 }, post_black: { color: 0x1b1b1b, roughness: 0.4 }, post_green: { color: 0x1d8a3a, roughness: 0.4 },
-  misc: { color: 0x888888, roughness: 0.6 },
+  nylon: { color: 0xe6e1d3, roughness: 0.6 }, misc: { color: 0x888888, roughness: 0.6 },
 };
 const canvas = document.getElementById('c');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
@@ -79,14 +79,23 @@ function apply() {
     o.material.clippingPlanes = state.sec ? [cut] : [];
   }
 }
-let lidSel = {}, verSel = 'pin';
+let lidSel = {}, verSel = 'pin', stSel = {};   // 261110: stSel = per-model state (T2P-P measuring / lifted / swung18)
 async function show(id) {
   const t2 = id.startsWith('T2P'), hd = id === 'MEMhead';
   const lid = lidSel[id] || LIDDEF[id];
-  const realId = t2 ? `${id}-${verSel}${state.open ? '_open' : ''}` : hd ? 'MEMhead' : `${id}__${lid}`;
+  const sts = INFO[id].states, st = sts ? (stSel[id] || sts[0][0]) : null;
+  const realId = sts ? `${id}-${st}` : t2 ? `${id}-${verSel}${state.open ? '_open' : ''}` : hd ? 'MEMhead' : `${id}__${lid}`;
+  const sr = document.getElementById('strow');
+  sr.classList.toggle('hide', !sts);
+  sr.innerHTML = '상태 ';
+  for (const [s, label] of sts || []) {
+    const b = document.createElement('button'); b.textContent = label; b.classList.toggle('on', s === st);
+    b.onclick = () => { stSel[id] = s; show(id); }; sr.appendChild(b);
+  }
+  document.getElementById('openw').classList.toggle('hide', !!sts);
   const small = id === 'MEM' || id === 'MEMA';   // 261107: small dark block with its own LID_MEM
   document.getElementById('lidrow').classList.toggle('hide', t2 || hd || small);
-  document.getElementById('verrow').classList.toggle('hide', !t2 || VERSEL.length < 2);
+  document.getElementById('verrow').classList.toggle('hide', !t2 || !!sts || VERSEL.length < 2);
   document.querySelectorAll('#verrow button').forEach((b) => b.classList.toggle('on', b.dataset.v === verSel));
   document.querySelectorAll('#lidrow button').forEach((b) => b.classList.toggle('on', b.dataset.l === lid));
   const c = await loadModel(realId);
@@ -143,6 +152,10 @@ for (const [k, label] of LAYERS) {
   l.querySelector('input').onchange = (e) => { state.layers[k] = e.target.checked; apply(); };
   lay.appendChild(l);
 }
+function placeCtl() {   // 261110: phones: keep the view panel below the tab bar (8 tabs wrap to 3 rows at 375 px)
+  document.getElementById('ctl').style.top = innerWidth < 600 ? `${top.offsetHeight + 4}px` : '';
+}
+placeCtl();
 document.getElementById('ex').oninput = (e) => { state.ex = +e.target.value; apply(); };
 document.getElementById('open').onchange = (e) => { state.open = e.target.checked; show(active); };
 document.getElementById('sec').onchange = (e) => { state.sec = e.target.checked; document.getElementById('secw').classList.toggle('hide', !state.sec); apply(); };
@@ -166,13 +179,14 @@ canvas.addEventListener('pointerup', (e) => {
 });
 let userMoved = false;
 controls.addEventListener('start', () => { userMoved = true; });
-addEventListener('resize', () => { fit(); if (!userMoved && cur) frame(); });   // the pane/phone may resize after load: re-frame until the user takes over
+addEventListener('resize', () => { fit(); placeCtl(); if (!userMoved && cur) frame(); });   // the pane/phone may resize after load: re-frame until the user takes over
 window.__v = { camera, controls, root, scene, frame };   // debugging from the console
 fit();
-// URL options for sharing a view: ?m=T2P-N&v=ring&open=1&ex=0.6&sec=1
+// URL options for sharing a view: ?m=T2P-N&v=ring&open=1&ex=0.6&sec=1 (T2P-P state: ?m=T2P-P&s=lifted)
 const q = new URLSearchParams(location.search);
 if (q.get('m') && INFO[q.get('m')]) active = q.get('m');
 if (q.get('lid')) lidSel[active] = q.get('lid');
+if (q.get('s') && (INFO[active].states || []).some(([s]) => s === q.get('s'))) stSel[active] = q.get('s');
 if (q.get('v') === 'pin' || q.get('v') === 'ring') verSel = q.get('v');
 if (q.get('open') === '1') { state.open = true; document.getElementById('open').checked = true; }
 if (q.get('ex')) { state.ex = +q.get('ex'); document.getElementById('ex').value = state.ex; }

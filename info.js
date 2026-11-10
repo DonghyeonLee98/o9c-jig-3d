@@ -44,8 +44,14 @@ export const INFO = {
 <p><b>힘·열기</b>: 핀 힘 앞·중간 0.59 N, 연결 0.55 N. 손잡이 7바퀴 = 3.5 mm 열림, 스프링 UF5-10 2개.</p>
 <p><b>빛</b>: 45°에서 92 %, 60°에서 79 %(2T와 같음). 부품 간섭 0.</p>
 <p><b>측정</b>: SMU-A FRONT–MID, SMU-B MID–REAR. 설계안 §26 (11/10).</p>` },
+  'T2P-P': { title: 'T2P-P — KIER 2T 탠덤, 바늘 프로브판 (빔라인 셀 팔 판 + W 바늘)', open: '', states: [['measuring', '측정'], ['lifted', '바늘 들림'], ['swung18', '18° 돌려 치움']], html: `
+<p><b>구조</b>: 빔라인 셀 v8.1의 황동 팔 판 4개(수정 없음)가 웨이퍼 왼쪽·오른쪽에서 W 바늘(Ø0.508, 약 31 mm)로 앞 패드 4개(±6.45)를 누름. F 2개·S 2개가 대각. 전기는 아래 PCB 도금 패드 → 황동 스탠드오프 M3 4 mm → 팔 판 → 바늘(납땜·전선 없음). 아래 PCB는 새 보드 O9C_T2P_P, 몸체·바닥판은 PLA 출력, 뒤는 0906 4개(T2P와 같은 자리).</p>
+<p><b>바늘 힘</b>: 0.16–0.37 N(웨이퍼 0.3–0.5 t). 바늘이 고정되는 곳을 누름 띠 앞(자유 길이 28.9 mm)과 팔 판 앞(22.3 mm) 두 가지로 계산한 범위이고, 실제는 둘 사이로 봄. 스탠드오프는 4 mm(3 mm는 바늘 옆면이 패드에 닿아 버림).</p>
+<p><b>들기·넣기</b>: 판마다 나일론 M2 들기 나사 1.9바퀴에 바늘 끝 z 6.05 → 앞에서 진공 펜으로 밀어 넣음. 들고 판을 18° 돌려 치우면 위에서도 넣을 수 있음(바늘 끝이 웨이퍼 밖 2.25 mm).</p>
+<p><b>빛</b>: 0–70°에서 활성 면적 가림 0 %, 75° 98.1 %, 80° 80.6 %. 부품 간섭 0(측정·들림·18° 치움).</p>
+<p><b>상태</b>: 실물 시험 0회, 주문 전. 바늘 끝 위치는 조립 때 V 홈 안에서 밀어 패드 가운데에 맞춤. 들림·치움 모델에는 가운데 M3 나사·스프링 와셔를 그리지 않음(빔라인 v8과 같음). 설계안 §27 (11/10).</p>` },
 };
-export const TABS = [['S22', 'S22'], ['SB4', 'SB4'], ['MEM', 'MEM'], ['T2P-N', 'T2P-N'], ['T2P-L', 'T2P-L (뚜껑 PCB)'], ['T2P-L3', 'T2P-L3 (3단자)'], ['MEMA', 'MEMA']];
+export const TABS = [['S22', 'S22'], ['SB4', 'SB4'], ['MEM', 'MEM'], ['T2P-N', 'T2P-N'], ['T2P-L', 'T2P-L (뚜껑 PCB)'], ['T2P-L3', 'T2P-L3 (3단자)'], ['T2P-P', 'T2P-P (바늘)'], ['MEMA', 'MEMA']];
 // T2P-N / T2P-A: rear contact pin (0906 under the wafer) or seat ring (0.4 ENIG ring PCB); same main PCB + base
 export const VERSEL = [['pin', '뒤: 핀']];   // 261107: seat ring dropped
 // 3 common lids (user 11/06): every glass-cell block has the same lid interface (pocket 25.4, seat 3.6, dowels, magnets, light-tight step)
