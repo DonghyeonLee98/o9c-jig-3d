@@ -24,10 +24,18 @@
   #lidrow button.on, #verrow button.on, #strow button.on { background: #222; color: #fff; }
   #ctl, #info, #top { box-sizing: border-box; }
   #tg { position: fixed; right: 6px; bottom: 6px; z-index: 4; font: bold 12px Arial, "Malgun Gothic"; padding: 6px 9px; border: 1px solid #888; background: #fff; border-radius: 4px; }
+  /* 261112: electrical-path overlay */
+  #pbtnw { position: fixed; right: 118px; bottom: 6px; z-index: 4; }
+  #pathBtn { font: bold 12px Arial, "Malgun Gothic"; padding: 6px 9px; border: 1px solid #888; background: #fff; border-radius: 4px; }
+  #pathBtn.on { background: #ff4d1a; color: #fff; border-color: #ff4d1a; }
+  #legend { position: fixed; left: 264px; bottom: 6px; width: 380px; max-width: calc(100vw - 12px); max-height: 46vh; overflow: auto; background: rgba(255,255,255,.95); border: 1px solid #bbb; border-radius: 6px; padding: 6px 9px; font-size: 12px; line-height: 1.4; z-index: 4; box-sizing: border-box; }
+  #legend .lh { display: flex; justify-content: space-between; align-items: center; } #legend .lh button { font: 11px Arial, "Malgun Gothic"; padding: 2px 7px; border: 1px solid #888; background: #fff; border-radius: 3px; }
+  #legend.fold .lb { display: none; } #legend .lr { display: flex; gap: 6px; padding: 2px 0; border-top: 1px solid #e3e3e3; } #legend .sw { flex: none; width: 14px; height: 6px; border-radius: 3px; margin-top: 6px; } #legend .ln { color: #555; font-size: 11.5px; margin: 3px 0; }
   @media (max-width: 600px) {
     #info { top: auto; bottom: 46px; max-height: 42vh; width: auto; left: 6px; }
     #ctl { bottom: auto; top: 86px; width: auto; right: 6px; font-size: 12px; }
     #ctl.min .body { display: none; }
+    #legend { left: 6px; right: 6px; width: auto; bottom: 44px; max-height: 38vh; }
   }
 </style>
 </head>
@@ -50,6 +58,8 @@
 </div>
 <div id="info"></div>
 <button id="tg">설명 숨기기</button>
+<span id="pbtnw"></span>
+<div id="legend" class="hide"></div>
 <script type="importmap">
 { "imports": {
   "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",

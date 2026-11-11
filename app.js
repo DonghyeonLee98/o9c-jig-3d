@@ -4,6 +4,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { INFO, TABS, LAYERS, EXPLODE, LIDSEL, LIDDEF, LIDINFO, VERSEL } from './info.js';
+import { initPaths } from './paths.js';   // 261112: electrical-path overlay
 
 const MAT = {   // physically based look per kind
   pom: { color: 0x17181a, roughness: 0.55 }, pcb: { color: 0x141414, roughness: 0.45, clearcoat: 0.6 },
@@ -32,7 +33,7 @@ const cut = new THREE.Plane(new THREE.Vector3(-1, 0, 0), 40);
 const root = new THREE.Group(); root.rotation.x = -Math.PI / 2; scene.add(root);   // CAD z-up -> three y-up
 const loader = new GLTFLoader();
 const cache = {};
-let cur = null, curId = null, parts = [];
+let cur = null, curId = null, parts = [], overlay = null;
 const state = { ex: 0, open: false, sec: false, layers: Object.fromEntries(LAYERS.map(([k]) => [k, true])) };
 
 function matFor(kind) {
@@ -100,7 +101,9 @@ async function show(id) {
   document.querySelectorAll('#lidrow button').forEach((b) => b.classList.toggle('on', b.dataset.l === lid));
   const c = await loadModel(realId);
   if (cur) root.remove(cur.g);
+  const oldParts = parts;
   cur = c; curId = realId; parts = c.list; root.add(c.g);
+  if (overlay) overlay.setModel(realId, oldParts);
   if (framedFor !== id) { frame(); framedFor = id; }   // 261109: fit the camera to the model (phones showed only a corner)
   document.querySelectorAll('#top button').forEach((b) => b.classList.toggle('on', b.dataset.id === id));
   const inf = INFO[id];
@@ -197,5 +200,9 @@ if (small && innerWidth > 0) { document.getElementById('info').classList.add('hi
 camera.position.set(40 + (small ? 95 : 115), small ? 215 : 170, -75 + (small ? 230 : 215));
 controls.target.set(40, small ? -20 : 0, -78);
 camera.lookAt(controls.target);
+// paths are drawn at the assembled position: turning them on resets the explode slider; they hide while exploded (?paths=1)
+overlay = await initPaths({ root, camera, getParts: () => parts, exploded: () => state.ex > 0, btnHost: document.getElementById('pbtnw'), legend: document.getElementById('legend'),
+  beforeOn: () => { if (state.ex > 0) { state.ex = 0; document.getElementById('ex').value = 0; apply(); } } });
 await show(active);
-(function loop() { requestAnimationFrame(loop); controls.update(); renderer.render(scene, camera); })();
+if (q.get('paths') === '1') overlay.toggle();
+(function loop() { requestAnimationFrame(loop); controls.update(); overlay.tick(); renderer.render(scene, camera); })();
