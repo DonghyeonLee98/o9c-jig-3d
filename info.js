@@ -44,6 +44,15 @@ export const INFO = {
 <p><b>힘·열기</b>: 핀 힘 앞·중간 0.59 N, 연결 0.55 N. 손잡이 7바퀴 = 3.5 mm 열림, 스프링 UF5-10 2개.</p>
 <p><b>빛</b>: 45°에서 92 %, 60°에서 79 %(2T와 같음). 부품 간섭 0.</p>
 <p><b>측정</b>: SMU-A FRONT–MID, SMU-B MID–REAR. 설계안 §26 (11/10).</p>` },
+  HOLD4: { title: 'HOLD4 — 키슬리 2400 유지판 (4채널, rev C2)', open: '', html: `
+<p><b>무엇</b>: 키슬리 2400 하나를 4채널(CH1–CH4)에 나누어 연결하는 유지판 전자 보드 한 장. 지그 본체가 아니라 PCB라 뚜껑·분해 대신 PCB 그림·부품·포스트 켜고 끄기로 봄.</p>
+<p><b>크기</b>: 160 × 100 mm, 4층, 두께 1.6 mm. 구멍 4개(M3, 모서리).</p>
+<p><b>채널</b>: CH1–CH4 각각 F+ (RED) / F− (BLACK) / S+ (RED) / S− (BLACK) 바인딩 포스트 4개 = 16개 + 오른쪽 아래 KEITHLEY FORCE·SENSE HI+(RED)/LO−(BLACK) 4개 = 포스트 20개.</p>
+<p><b>USB-C</b>: 왼쪽 가장자리 J1. 점검용 패드(+5V, GND, SCL, SDA, OUT1–4, DAC1–4 등)와 J2 2 × 4 핀헤더(2.54 mm)는 가운데 아래·오른쪽 아래.</p>
+<p><b>상태</b>: rev C2 · 2026-11-12 · <b>주문 전</b>.</p>
+<table><tr><td>PCB 그림</td><td>KiCad 3D 렌더(구리·솔더마스크·실크, 윗면·아랫면)를 판에 입힌 그림. 마스크 색은 KiCad 기본 녹색(주문 색 확인 전).</td></tr>
+<tr><td>부품</td><td>KiCad 3D 모델(저항·커패시터·IC·LED 등). J2 핀헤더도 KiCad 모델.</td></tr>
+<tr><td>모형 (치수 미실측)</td><td>JB-601 바인딩 포스트: 머리 Ø11 × 높이 12(가정), 축 Ø6, 아래 M6 너트 맞변 10 × 두께 5(가정). 판매처 도면 값 중 Ø11·Ø6·10만 반영, 높이는 임의. 색은 실크의 RED/BLACK 표기대로. USB-C는 상자 모형(KiCad 외곽 8.94 × 7.3 × 3.26).</td></tr></table>` },
   'T2P-P': { title: 'T2P-P r2 — KIER 2T 탠덤, 바늘 프로브판 (빔라인 셀 최종 팔 판 + W 바늘)', open: '', states: [['measuring', '측정'], ['lifted', '바늘 들림'], ['swung18', '18° 돌려 치움']], html: `
 <p><b>r2 (11/11)</b>: 빔라인 셀 팔 판이 최종 r6(31.6 × 12, 경사 10.77°, 멈춤 손가락)으로 바뀌어 몸체만 새로 그림. 아래 PCB O9C_T2P_P·바닥판·팔 판·누름 띠(30 × 10 × 3.13 쐐기)는 그대로.</p>
 <p><b>구조</b>: 황동 팔 판 4개가 웨이퍼 왼쪽·오른쪽에서 W 바늘(Ø0.508, 32 mm 자르지 않음)로 앞 패드 4개(±6.45)를 누름. F 2개·S 2개가 대각. 전기는 아래 PCB 도금 패드 → 황동 스탠드오프 M3 5 mm(Harwin R30-3000502) + 와셔 SPWF3 0.5 → 팔 판 → 바늘(납땜·전선 없음). 판 바닥 z 5.5. 멈춤은 MS2-10 맞춤핀 4개(몸체에 압입). 몸체·바닥판은 PLA 출력(몸체 36 g), 뒤는 0906 4개.</p>
@@ -52,7 +61,7 @@ export const INFO = {
 <p><b>빛</b>: 0–70°에서 활성 면적 가림 0 %. 75°에서 88 %, 80°에서 42 %만 보임(11/10판보다 높은 띠 때문). 부품 간섭 0쌍(측정·들림·18° 치움).</p>
 <p><b>상태</b>: 실물 시험 0회, 출력·주문 전. 5 mm 스탠드오프 암나사 깊이, 뒷핀 0906 힘, 바늘 테이퍼는 미확인. 들림·치움 모델에는 가운데 M3 나사·스프링 와셔를 그리지 않음. 설계안 §27-10 (11/11).</p>` },
 };
-export const TABS = [['S22', 'S22'], ['SB4', 'SB4'], ['MEM', 'MEM'], ['T2P-N', 'T2P-N'], ['T2P-L', 'T2P-L (뚜껑 PCB)'], ['T2P-L3', 'T2P-L3 (3단자)'], ['T2P-P', 'T2P-P (바늘)'], ['MEMA', 'MEMA']];
+export const TABS = [['S22', 'S22'], ['SB4', 'SB4'], ['MEM', 'MEM'], ['T2P-N', 'T2P-N'], ['T2P-L', 'T2P-L (뚜껑 PCB)'], ['T2P-L3', 'T2P-L3 (3단자)'], ['T2P-P', 'T2P-P (바늘)'], ['MEMA', 'MEMA'], ['HOLD4', 'HOLD4 (유지판)']];
 // T2P-N / T2P-A: rear contact pin (0906 under the wafer) or seat ring (0.4 ENIG ring PCB); same main PCB + base
 export const VERSEL = [['pin', '뒤: 핀']];   // 261107: seat ring dropped
 // 3 common lids (user 11/06): every glass-cell block has the same lid interface (pocket 25.4, seat 3.6, dowels, magnets, light-tight step)
@@ -60,5 +69,5 @@ export const LIDSEL = [['SC_1p1', 'SC 1.1 t'], ['SC_2p2', 'SC 2.2 t'], ['MEM_1p1
 export const LIDDEF = { S22: 'SC_1p1', SB4: 'SC_1p1', MEM: 'MEM_1p1', MEMA: 'MEM_1p1' };
 export const LIDINFO = '<p><b>뚜껑 3종 공통</b>: LID_SC_1p1 · LID_SC_2p2 (O901식 곧은 창 20.9, 누름 테 2 mm, 테 높이 1.18 / 0.08) · LID_MEM_1p1 (창 없음, 빛 막는 턱). S22·SB4 블록에 맞고(MEM·MEMA는 전용 LID_MEM) 간섭 0. 테 높이는 0.12 측정 마스크 포함 값이라 마스크 없이 쓰면 핀이 0.9 대신 0.78 mm 눌림.</p>';
 export const LAYERS = [['base', '바닥판'], ['pcb', 'PCB'], ['block', '블록'], ['lid', '뚜껑'], ['blocks', '바늘 블록'], ['pins', '핀'],
-  ['front', '스위치·포스트·BNC'], ['glass', '유리·웨이퍼'], ['hw', '나사·자석']];
-export const EXPLODE = { base: -34, pcb: -17, pins: -17, front: -17, block: 0, hw: 0, glass: 16, lid: 34, blocks: 18 };
+  ['front', '스위치·포스트·BNC'], ['glass', '유리·웨이퍼'], ['hw', '나사·자석'], ['silk', 'PCB 그림(구리·실크)'], ['parts', '부품'], ['posts', '포스트(모형)']];
+export const EXPLODE = { base: -34, pcb: -17, pins: -17, front: -17, block: 0, hw: 0, glass: 16, lid: 34, blocks: 18, silk: -17, parts: 12, posts: 30 };

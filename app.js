@@ -26,6 +26,7 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xeef0f2);
 scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
 const key = new THREE.DirectionalLight(0xffffff, 1.2); key.position.set(-80, 160, 120); scene.add(key);
+const fill = new THREE.DirectionalLight(0xffffff, 1.6); fill.position.set(60, -150, -80); scene.add(fill);   // 261112: light for undersides (HOLD4 bottom picture)
 const camera = new THREE.PerspectiveCamera(35, 1, 1, 3000);
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
@@ -37,7 +38,7 @@ let cur = null, curId = null, parts = [], overlay = null;
 const state = { ex: 0, open: false, sec: false, layers: Object.fromEntries(LAYERS.map(([k]) => [k, true])) };
 
 function matFor(kind) {
-  const p = { ...(MAT[kind] || MAT.misc), clippingPlanes: [], side: THREE.DoubleSide };
+  const p = { ...(MAT[kind] || (kind[0] === '#' ? { color: parseInt(kind.slice(1), 16), roughness: 0.5 } : MAT.misc)), clippingPlanes: [], side: THREE.DoubleSide };
   return new THREE.MeshPhysicalMaterial(p);
 }
 async function loadModel(id) {
@@ -62,6 +63,7 @@ async function loadModel(id) {
     tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
     const pl = new THREE.Mesh(new THREE.PlaneGeometry(x1 - x0, y1 - y0), new THREE.MeshPhysicalMaterial({ map: tex, roughness: 0.45, clearcoat: 0.5, clippingPlanes: [] }));
     pl.position.set((x0 + x1) / 2, (y0 + y1) / 2, zt + 0.03);
+    if (m.flip) pl.rotation.y = Math.PI;   // 261112: bottom-side picture (HOLD4) faces -z
     pl.userData = { ...m, name: m.name + ' (KiCad 그림)', base: pl.position.clone() };
     gltf.scene.add(pl); list.push(pl);
   }
@@ -82,10 +84,10 @@ function apply() {
 }
 let lidSel = {}, verSel = 'pin', stSel = {};   // 261110: stSel = per-model state (T2P-P measuring / lifted / swung18)
 async function show(id) {
-  const t2 = id.startsWith('T2P'), hd = id === 'MEMhead';
+  const t2 = id.startsWith('T2P'), hd = id === 'MEMhead' || id === 'HOLD4';
   const lid = lidSel[id] || LIDDEF[id];
   const sts = INFO[id].states, st = sts ? (stSel[id] || sts[0][0]) : null;
-  const realId = sts ? `${id}-${st}` : t2 ? `${id}-${verSel}${state.open ? '_open' : ''}` : hd ? 'MEMhead' : `${id}__${lid}`;
+  const realId = sts ? `${id}-${st}` : t2 ? `${id}-${verSel}${state.open ? '_open' : ''}` : hd ? id : `${id}__${lid}`;
   const sr = document.getElementById('strow');
   sr.classList.toggle('hide', !sts);
   sr.innerHTML = '상태 ';
@@ -93,7 +95,7 @@ async function show(id) {
     const b = document.createElement('button'); b.textContent = label; b.classList.toggle('on', s === st);
     b.onclick = () => { stSel[id] = s; show(id); }; sr.appendChild(b);
   }
-  document.getElementById('openw').classList.toggle('hide', !!sts);
+  document.getElementById('openw').classList.toggle('hide', !!sts || hd);
   const small = id === 'MEM' || id === 'MEMA';   // 261107: small dark block with its own LID_MEM
   document.getElementById('lidrow').classList.toggle('hide', t2 || hd || small);
   document.getElementById('verrow').classList.toggle('hide', !t2 || !!sts || VERSEL.length < 2);
@@ -109,6 +111,10 @@ async function show(id) {
   const inf = INFO[id];
   document.getElementById('info').innerHTML = `<h4>${inf.title}</h4>${inf.html}${t2 || hd || small ? '' : LIDINFO}`;
   document.getElementById('openl').textContent = inf.open;
+  const have = new Set(parts.map((o) => o.userData.layer));   // 261112: show only the layer boxes this model has
+  document.querySelectorAll('#layers label').forEach((l) => l.classList.toggle('hide', !have.has(l.querySelector('input').dataset.k)));
+  document.getElementById('pbtnw').classList.toggle('hide', hd);
+  document.getElementById('secx').max = hd ? 160 : 80;
   apply();
 }
 let framedFor = null;
