@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>유지판 + 지그 연결 — 3D</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #eef0f2; font-family: Arial, "Malgun Gothic", sans-serif; color: #222; overflow: hidden; }
+  #c { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+  #top { position: fixed; top: 0; left: 0; right: 0; padding: 5px 8px; background: rgba(255,255,255,.93); border-bottom: 1px solid #ccc; z-index: 5; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 13px; }
+  #top b { font-size: 14px; } #top a { color: #0b57d0; }
+  .panel { position: fixed; background: rgba(255,255,255,.95); border: 1px solid #bbb; border-radius: 6px; z-index: 4; box-sizing: border-box; font-size: 12.5px; }
+  .panel h4 { margin: 0; padding: 6px 9px; font-size: 13px; cursor: pointer; background: #f1f3f4; border-radius: 6px 6px 0 0; }
+  .panel .body { padding: 7px 9px; }
+  .panel.min .body { display: none; } .panel.min h4 { border-radius: 6px; }
+  #ctl { left: 6px; top: 44px; width: 268px; max-height: calc(100vh - 56px); overflow: auto; }
+  #tabw { left: 280px; right: 6px; bottom: 6px; max-height: 44vh; overflow: auto; }
+  button { font: 12px Arial, "Malgun Gothic"; padding: 4px 7px; margin: 1px; border: 1px solid #888; background: #fff; border-radius: 3px; cursor: pointer; }
+  button.on { background: #222; color: #fff; border-color: #222; }
+  .sec { margin: 5px 0 2px; font-weight: bold; color: #444; }
+  #light { width: 100%; }
+  table.t { border-collapse: collapse; width: 100%; font-size: 11.5px; } table.t th, table.t td { border: 1px solid #ddd; padding: 2px 4px; text-align: center; white-space: nowrap; }
+  table.t th { background: #f1f3f4; } tr.handover td { background: #fff4cc; } tr.short td { background: #ffe3e0; } tr.blocked td { background: #fdd; } tr.open td { background: #f4f4f4; }
+  .on { } td b.on { color: #b00020; } small { color: #666; }
+  .g { margin: 2px 0 5px; line-height: 1.5; } .n { margin: 2px 0; font-size: 12px; color: #333; } .n.bad { color: #b00020; }
+  #stat { font-weight: bold; margin-bottom: 3px; }
+  #fault { margin-top: 5px; padding: 5px 7px; background: #fdecea; border: 1px solid #e57373; border-radius: 4px; line-height: 1.5; }
+  .hide { display: none !important; }
+  #pick { position: fixed; left: 50%; transform: translateX(-50%); top: 48px; background: #222; color: #fff; padding: 6px 10px; border-radius: 4px; font-size: 12.5px; display: none; z-index: 6; max-width: 92vw; line-height: 1.45; }
+  #legend { margin-top: 4px; line-height: 1.7; } #legend i { display: inline-block; width: 22px; height: 6px; border-radius: 3px; vertical-align: middle; margin: 0 3px 0 8px; }
+  #steptext { margin-top: 3px; color: #1a4; font-size: 12px; line-height: 1.4; }
+  #foot { margin-top: 3px; color: #777; font-size: 11.5px; }
+  @media (max-width: 600px) {
+    #ctl { top: auto; bottom: 46px; left: 6px; right: 6px; width: auto; max-height: 48vh; } #tabw { left: 6px; right: 6px; bottom: 6px; max-height: 40vh; }
+    #top { font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="top"><b>유지판 + 지그 연결 (3D)</b><a href="index.html?m=HOLD4">유지판 모델</a><a href="index.html">지그 뷰어</a>
+  <span id="views"><button data-v="all">전체</button><button data-v="board">유지판</button><button data-v="jig">지그</button><button data-v="kei">키슬리</button><button data-v="pc">PC·허브</button></span></div>
+<div id="pick"></div>
+<div id="ctl" class="panel"><h4 id="ctlh">조작 ▾</h4><div class="body">
+  <div class="sec">상태</div><div id="states"></div>
+  <div class="sec">빛 세기 (광전류) <span id="lightv">100 %</span></div><input id="light" type="range" min="0" max="120" step="1" value="100">
+  <div class="sec">지그 종류</div><div id="kind"><button class="on" data-k="T2P">T2P 탠덤 (4선)</button><button data-k="S22">S22·SB4 (2선)</button></div>
+  <div class="sec">잘못 연결 시연</div>
+  <div><select id="chsel"><option value="0">CH1</option><option value="1">CH2</option><option value="2">CH3</option><option value="3">CH4</option></select>
+  <span id="faults"><button data-f="rev">빨강–빨강(극성 반대)</button><button data-f="sminus">S− 빠짐</button><button data-f="double">두 채널 동시 인계</button><button data-f="clear">해제</button></span></div>
+  <div class="sec">연결 순서</div><div id="steps"></div><div id="steptext"></div>
+  <div id="legend"><i style="background:#e53935"></i>F+<i style="background:#111"></i>F−<i style="background:#ff9800"></i>S+<i style="background:#9aa3ad"></i>S−<i style="background:#2e7d32"></i>/OE<i style="background:#1565c0"></i>USB<br>노란 점 = 전류(방향·빠르기), 선·점·단자를 누르면 넷·양 끝·전압·전류</div>
+  <div id="foot">계산값이며 실물 측정 전입니다(sim.py 단일 다이오드 셀, 01 회로사양). 키슬리·PC·허브·포스트 높이는 모형.</div>
+</div></div>
+<div id="tabw" class="panel"><h4 id="tabh">상태 표 ▾</h4><div class="body"><div id="stat"></div><div id="tab"></div><div id="fault" class="hide"></div><div id="note"></div></div></div>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+<script type="module" src="setup.js"></script>
+</body>
+</html>

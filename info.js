@@ -50,6 +50,7 @@ export const INFO = {
 <p><b>채널</b>: CH1–CH4 각각 F+ (RED) / F− (BLACK) / S+ (RED) / S− (BLACK) 바인딩 포스트 4개 = 16개 + 오른쪽 아래 KEITHLEY FORCE·SENSE HI+(RED)/LO−(BLACK) 4개 = 포스트 20개.</p>
 <p><b>USB-C</b>: 왼쪽 가장자리 J1. 점검용 패드(+5V, GND, SCL, SDA, OUT1–4, DAC1–4 등)와 J2 2 × 4 핀헤더(2.54 mm)는 가운데 아래·오른쪽 아래.</p>
 <p><b>상태</b>: rev C2 · 2026-11-12 · <b>주문 전</b>.</p>
+<p><a href="setup.html"><b>유지판 + 지그 4대 + 키슬리 2400 연결 3D 페이지 ▸</b></a> (선·릴레이·전류 방향, 잘못 연결 시연)</p>
 <table><tr><td>PCB 그림</td><td>KiCad 3D 렌더(구리·솔더마스크·실크, 윗면·아랫면)를 판에 입힌 그림. 마스크 색은 KiCad 기본 녹색(주문 색 확인 전).</td></tr>
 <tr><td>부품</td><td>KiCad 3D 모델(저항·커패시터·IC·LED 등). J2 핀헤더도 KiCad 모델.</td></tr>
 <tr><td>모형 (치수 미실측)</td><td>JB-601 바인딩 포스트: 머리 Ø11 × 높이 12(가정), 축 Ø6, 아래 M6 너트 맞변 10 × 두께 5(가정). 판매처 도면 값 중 Ø11·Ø6·10만 반영, 높이는 임의. 색은 실크의 RED/BLACK 표기대로. USB-C는 상자 모형(KiCad 외곽 8.94 × 7.3 × 3.26).</td></tr></table>` },
