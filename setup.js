@@ -372,7 +372,7 @@ $('faults').onclick = (e) => {
 };
 ['ctlh', 'tabh'].forEach((id) => { $(id).onclick = () => $(id).parentElement.classList.toggle('min'); });
 $('views').onclick = (e) => { const b = e.target.closest('button'); if (!b) return; view(b.dataset.v); };
-const VIEWS = { all: [[40, -820, 760], [40, 60, 10]], board: [[0, -230, 250], [0, 0, 25]], jig: [[0, -60, 380], [0, 190, 20]], kei: [[330, -330, 260], [330, -60, 30]], pc: [[-260, -330, 220], [-250, -60, 20]] };
+const VIEWS = { all: [[40, -820, 760], [40, 60, 10]], board: [[0, -230, 250], [0, 0, 25]], jig: [[0, -60, 380], [0, 190, 20]], kei: [[330, -330, 260], [330, -60, 30]], pc: [[-260, -330, 220], [-250, -60, 20]], t4: [[-40, -640, 760], [-40, 150, 10]] };
 function view(v) { const [p, t] = VIEWS[v]; camera.position.set(...p).applyMatrix4(new THREE.Matrix4().makeRotationX(-Math.PI / 2)); controls.target.set(...t).applyMatrix4(new THREE.Matrix4().makeRotationX(-Math.PI / 2)); camera.lookAt(controls.target); controls.update(); }
 
 // ---------- picking ----------
@@ -399,6 +399,30 @@ function describe(f) {
   return `<b>${f.name}</b><br>넷 ${f.net} · 양 끝: ${f.a} ↔ ${f.b}<br>${cur}<br>전위 ${volt}${vc}`;
 }
 
+// ---------- 261113: 4-cell jig + DB37 cable + cap board path (extra group, off by default; button "4셀 지그 · 덮개판 경로") ----------
+let t4Objs = [], t4On = false, t4Busy = false;
+async function toggleT4Path() {
+  if (t4Busy) return; t4Busy = true;
+  if (t4On) { for (const o of t4Objs) o.removeFromParent(); t4Objs = []; t4On = false; $('t4btn').classList.remove('on'); t4Busy = false; return; }
+  const n0 = root.children.length;
+  const g = await loadModel('T4-closed'); const bb = new THREE.Box3().setFromObject(g);
+  const T4O = [-120, 330]; g.position.set(T4O[0], T4O[1], -bb.min.z); root.add(g);
+  let db = null; g.traverse((o) => { if (o.isMesh && o.userData && /DB37/.test(o.userData.name || '')) db = o; });
+  const dbc = db ? new THREE.Box3().setFromObject(db).getCenter(new THREE.Vector3()) : new THREE.Vector3(T4O[0] + 5, T4O[1] + 70, 5);
+  const capZ = BOARD_Z + 1.6 + 6.0;                       // cap board bottom on the post shoulders (6.0 above the hold-board top, model)
+  const hx = (x) => BOARD_ORG[0] + x, hy = (y) => BOARD_ORG[1] + y;
+  box(147.55, 46.6, 1.6, 0x2a8f4e, [hx(5 + 147.55 / 2), hy(58.4 + 46.6 / 2), capZ], { op: 0.8 });
+  box(69.6, 18.4, 14, 0xc4c8ce, [hx(78.8), hy(101.5), capZ - 2.0]);
+  const capDb = [hx(78.8), hy(101.5) + 6, capZ + 8];
+  const pts = [[dbc.x, dbc.y, dbc.z + 6], [dbc.x - 25, dbc.y, 60], [dbc.x - 25, 160, 70], [capDb[0] - 10, 80, 60], [capDb[0], capDb[1] + 16, capDb[2] + 12], capDb].map(V3);
+  const cur = new THREE.CatmullRomCurve3(pts, false, 'catmullrom', 0.35);
+  const cab = new THREE.Mesh(new THREE.TubeGeometry(cur, 80, 3.2, 8, false), new THREE.MeshStandardMaterial({ color: 0x6b7078, roughness: 0.6 })); root.add(cab);
+  label('4셀 탠덤 지그 T4 (revB3, rev B1 PCB) — DB37 수', [T4O[0] + 70, T4O[1] + 100, 60], { size: 12 });
+  label('DB37 수–암 케이블 (37핀: 자리마다 6선, NTC, 실드)', [(dbc.x + capDb[0]) / 2 - 40, 190, 85], { size: 10, color: '#444' });
+  label('덮개판 O9C_H4_CAP rev B1: DB37 암 → 포스트 16개(J11–J44) 위', [hx(80), hy(80), capZ + 38], { size: 9, color: '#0b5a2a' });
+  label('지그 4선 케이블 대신 이 경로를 씀. 설계 검토용, 미주문', [hx(80), hy(80), capZ + 28], { size: 8, color: '#8a1c1c' });
+  t4Objs = Array.from(root.children).slice(n0); t4Objs.push(cab); t4On = true; $('t4btn').classList.add('on'); t4Busy = false;
+}
 // ---------- main ----------
 function fit() {
   renderer.setSize(innerWidth, innerHeight, false); camera.aspect = innerWidth / innerHeight;
@@ -424,6 +448,7 @@ async function init() {
   if (q.get('fault')) { const [t, c] = q.get('fault').split(':'); sel.value = String((+c || 1) - 1); $('faults').querySelector(`[data-f="${t}"]`).click(); }
   const small = innerWidth < 600;
   if (small) { $('ctl').classList.add('min'); $('tabw').classList.add('min'); }
+  $('t4btn').onclick = toggleT4Path; if (q.get('t4') === '1') await toggleT4Path();
   view('all'); document.body.classList.add('ready');
   window.__setup = { root, st, get res() { return res; }, setMode, setStep, recompute, flows, camera, controls, view };
   loop();

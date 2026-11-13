@@ -39,7 +39,7 @@
 <body>
 <canvas id="c"></canvas>
 <div id="top"><b>유지판 + 지그 연결 (3D)</b><a href="index.html?m=HOLD4">유지판 모델</a><a href="index.html">지그 뷰어</a>
-  <span id="views"><button data-v="all">전체</button><button data-v="board">유지판</button><button data-v="jig">지그</button><button data-v="kei">키슬리</button><button data-v="pc">PC·허브</button></span></div>
+  <span id="views"><button data-v="all">전체</button><button data-v="board">유지판</button><button data-v="jig">지그</button><button data-v="kei">키슬리</button><button data-v="pc">PC·허브</button><button data-v="t4">4셀 경로</button></span></div>
 <div id="pick"></div>
 <div id="ctl" class="panel"><h4 id="ctlh">조작 ▾</h4><div class="body">
   <div class="sec">상태</div><div id="states"></div>
@@ -48,6 +48,7 @@
   <div class="sec">잘못 연결 시연</div>
   <div><select id="chsel"><option value="0">CH1</option><option value="1">CH2</option><option value="2">CH3</option><option value="3">CH4</option></select>
   <span id="faults"><button data-f="rev">빨강–빨강(극성 반대)</button><button data-f="sminus">S− 빠짐</button><button data-f="double">두 채널 동시 인계</button><button data-f="clear">해제</button></span></div>
+  <div class="sec">4셀 지그 · 덮개판 경로 (DB37)</div><div><button id="t4btn">4셀 지그 + DB37 케이블 + 덮개판 보이기</button></div>
   <div class="sec">연결 순서</div><div id="steps"></div><div id="steptext"></div>
   <div id="legend"><i style="background:#e53935"></i>F+<i style="background:#111"></i>F−<i style="background:#ff9800"></i>S+<i style="background:#9aa3ad"></i>S−<i style="background:#2e7d32"></i>/OE<i style="background:#1565c0"></i>USB<br>노란 점 = 전류(방향·빠르기), 선·점·단자를 누르면 넷·양 끝·전압·전류</div>
   <div id="foot">계산값이며 실물 측정 전입니다(sim.py 단일 다이오드 셀, 01 회로사양). 키슬리·PC·허브·포스트 높이는 모형.</div>

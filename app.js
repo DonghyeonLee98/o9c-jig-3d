@@ -76,15 +76,16 @@ function apply() {
   for (const o of parts) {
     const u = o.userData;
     let dz = (EXPLODE[u.layer] || 0) * state.ex;
-    if (!t2 && state.open && u.layer === 'lid') dz += 45;
+    if (!t2 && !SOLO.has(curId.split('-')[0]) && state.open && u.layer === 'lid') dz += 45;
     o.position.set(u.base.x, u.base.y, u.base.z + dz);
     o.visible = state.layers[u.layer] !== false;
     o.material.clippingPlanes = state.sec ? [cut] : [];
   }
 }
+const SOLO = new Set(['HOLD4P', 'T4', 'S4', 'CAP4', 'MEMAC']);   // 261113: 4-cell jigs, protection plate, cap board, MEMA rev C1: own GLBs (states or single), no lid row / paths
 let lidSel = {}, verSel = 'pin', stSel = {};   // 261110: stSel = per-model state (T2P-P measuring / lifted / swung18)
 async function show(id) {
-  const t2 = id.startsWith('T2P'), hd = id === 'MEMhead' || id === 'HOLD4';
+  const t2 = id.startsWith('T2P'), hd = id === 'MEMhead' || id === 'HOLD4' || SOLO.has(id);
   const lid = lidSel[id] || LIDDEF[id];
   const sts = INFO[id].states, st = sts ? (stSel[id] || sts[0][0]) : null;
   const realId = sts ? `${id}-${st}` : t2 ? `${id}-${verSel}${state.open ? '_open' : ''}` : hd ? id : `${id}__${lid}`;
@@ -163,6 +164,7 @@ for (const [k, label] of LAYERS) {
 }
 function placeCtl() {   // 261110: phones: keep the view panel below the tab bar (8 tabs wrap to 3 rows at 375 px)
   document.getElementById('ctl').style.top = innerWidth < 600 ? `${top.offsetHeight + 4}px` : '';
+  document.getElementById('info').style.top = innerWidth < 600 ? '' : `${top.offsetHeight + 6}px`;   // 261113: 14 tabs wrap to two rows on desktop
 }
 placeCtl();
 document.getElementById('ex').oninput = (e) => { state.ex = +e.target.value; apply(); };
